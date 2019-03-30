@@ -1,0 +1,8 @@
+https://medium.com/@ethanryan/making-a-simple-real-time-collaboration-app-with-react-node-express-and-yjs-a261597fdd44
+
+###using socket.io
+
+https://medium.com/front-end-weekly/build-a-collaborative-rich-text-editor-with-node-js-and-socket-io-38ee25b6e315
+###socket.io
+https://socket.io/docs/ 
+

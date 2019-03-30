@@ -1,0 +1,35 @@
+{
+  "name": "socket-chat-example",
+  "version": "0.0.1",
+  "description": "my first socket.io app",
+  "dependencies": {
+    "date-and-time": "^0.6.3",
+    "express": "^4.16.4",
+    "git": "^0.1.5",
+    "moment": "^2.24.0",
+    "node-datetime": "^2.1.2",
+    "socket.io": "^2.2.0"
+  },
+  "engines": {
+    "node": "v8.11.3"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prashantRmishra/realtime_show_it.git"
+  },
+  "keywords": [
+    "node.js",
+    "socket.io"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prashantRmishra/realtime_show_it.git/issues"
+  },
+  "homepage": "https://github.com/prashantRmishra/realtime_show_it.git#readme"
+}

@@ -1,0 +1,222 @@
+<html>
+
+<head><title>CCL CHAT</title>
+
+
+<style>
+body {
+  background-color: #A9A9A9;
+  color:white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.button ,button,a{
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-top: 5px;
+  margin-left:5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+ #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px;background: #C0C0C0;color:white; padding: 12px 20px; margin:1px; font-size:16px;font-family: Arial, Helvetica, sans-serif;}
+      #messages li:nth-child(odd) { background: #4CAF50; }
+	  textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+input[type=text], select {
+ 
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+input[id=m], select {
+ 
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+}
+
+</style>
+
+
+</head>
+<body>
+<center>
+<ul id="messages"></ul></center>
+
+<center><div id="chat"><form action="">
+
+Your Name:<input type="text" name ="name" id="name" width="20%"></input>
+Message:<input id="m" autocomplete="off" width="80%" placeholder="Write message....."/><button class="button">HIT ME</button>
+
+
+</form></div></center>
+<div>
+<center><textarea id="area" placeholder="Write your code...." rows="30" cols="100"></textarea></center>
+
+</div>
+<center><div><button type="button" onclick="setup()">Save to Firebase</button></div></center>
+<center><div><a href="https://firebasestorage.googleapis.com/v0/b/real-time-collaboration-90349.appspot.com/o/collaboration?alt=media&token=1a0dfced-5387-4967-977a-5a819f50367a" class="href">See saved chats and code</a></div></center>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<!--script src="path/to/vanilla.js"></script-->
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+
+ 
+<script>var socket = io();
+var config = {
+	apiKey: "AIzaSyCasm9M-zx7tuNXP_jsSrMuwnPZr541tBM",
+	authDomain: "real-time-collaboration-90349.firebaseapp.com",
+	databaseURL: "https://real-time-collaboration-90349.firebaseio.com",
+	projectId: "real-time-collaboration-90349",
+	storageBucket: "real-time-collaboration-90349.appspot.com",
+	messagingSenderId: "447399585205"
+};
+firebase.initializeApp(config);
+</script>
+
+<script>
+function setup(){
+  ////////////////////
+//  var database=firebase.database();
+//  var ref = database.ref('collab');
+//  ////////////////////
+ var collab=document.getElementById("area").value;
+// var name=document.getElementById("name").value;
+// var message=document.getElementById("m").value;
+// var data={
+//   collaboration_texts:collab,
+//   user:name,
+//   user_message:message
+// }
+socket.emit('saveToFile',collab);
+
+
+///////////////
+//  ref.push(data);
+// //////////////
+//  alert("Text has been uploaded to FIREBASE successfully");
+// window.onerror=function(){
+//    alert("Reload the page as an error has been occurred");
+//  }
+
+
+
+
+
+//---------------------------------------------------------------storage----------
+
+ 
+var storageRef=firebase.storage();
+// var metadeta={
+//   contentType:'palin/txt'
+// }
+
+var ref= storageRef.ref('collaboration');
+socket.on('file',function(data){
+console.log('frrom index.js'+data);
+
+var file = new File([data], "output.txt", {
+  type: "text/plain",
+});
+ref.put(file).then(function(snapshot){
+console.log('upload is done');
+
+});
+alert("file uploaded to FIREBASE storage");
+});
+
+//-----------------------------------------------------file upload------------------
+
+
+}</script>
+<script>
+
+var a=0;
+$(document).ready(function(){
+ 
+	if(a==0){
+	socket.on('code',function(code){
+   
+   $("#area").val(code);
+  
+  });
+  
+	a=1;
+	}
+  
+  $("#area").keyup(function(){
+  var text=$("#area").val();
+   socket.emit('code',text);
+   
+   //socket.emit('temp',"hello");
+   socket.on('code',function(code){
+   
+   $("#area").val(code);
+  
+  });
+  
+  
+  
+  
+  });
+  
+  
+  //here im writing code for new conection
+  
+  ///till here for new connection
+});
+
+</script>
+
+<script>
+
+$(function(){
+ 
+ $('form').submit(function(e){
+ e.preventDefault();
+ socket.emit('chat message',$('#name').val()+':'+$('#m').val());
+ $('#m').val('');
+ return false;
+ 
+ 
+ });
+ //var a= getElementById("name");
+ socket.on('chat message', function(data){
+ //
+      //$('#messages').append($('<li>').$('#name')); 
+      $('#messages').append($('<li>').text(data));
+	  //$('#name').val('');
+    });
+
+});
+ 
+</script>
+</body>
+</html>
